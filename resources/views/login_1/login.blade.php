@@ -241,23 +241,24 @@
                           ">
                           Log In
                         </button>
-
-                        <div style="margin-top: 10px; text-align: center;">
-                          <a href="{{ env('APP_URL') }}/api/party/login"
-                            style="
-                              display: inline-block;
-                              padding: 14px;
-                              width: 100%;
-                              font-weight: bold;
-                              background: navy;
-                              color: #ffffff;
-                              font-size: 14px;
-                              text-decoration: none;
-                              border-radius: 5px;
-                            ">
-                            Party Login
-                          </a>
-                        </div>
+                        @if(env('API_ENABLE') == 1)    
+                            <div style="margin-top: 10px; text-align: center;">
+                            <a href="{{ env('APP_URL') }}/api/party/login"
+                                style="
+                                display: inline-block;
+                                padding: 14px;
+                                width: 100%;
+                                font-weight: bold;
+                                background: navy;
+                                color: #ffffff;
+                                font-size: 14px;
+                                text-decoration: none;
+                                border-radius: 5px;
+                                ">
+                                Party Login
+                            </a>
+                            </div>
+                        @endif
 
 
 

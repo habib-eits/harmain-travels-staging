@@ -11,7 +11,9 @@
              <th>Quantity</th>
              <th>Total Pax</th>
              <th>Purchase</th>
+             <th>Payable</th>
              <th>Sale</th>
+             <th>Receivable</th>
              <th>Action</th>
             {{-- <th style="display: none;">Status</th> --}}
             {{-- <th style="display: none;">Purchase</th> --}}

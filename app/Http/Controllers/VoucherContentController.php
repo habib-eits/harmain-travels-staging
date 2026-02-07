@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
  
- use Session;
 use Illuminate\Http\Request;
 use App\Models\VoucherContent;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Session;
 
 
 class VoucherContentController extends Controller
@@ -44,11 +44,7 @@ class VoucherContentController extends Controller
                                                 <i class="bx bx-pencil font-size-16 text-secondary me-1"></i> Edit
                                             </a>
                                         </li>
-                                         <li>
-                                            <a href="javascript:void(0)" onclick="deleteRecord(' . $row->id . ')" class="dropdown-item">
-                                                <i class="bx bx-trash font-size-16 text-danger me-1"></i> Delete
-                                            </a>
-                                        </li>
+                                         
                                        
                                        
                                     </ul>
@@ -59,7 +55,11 @@ class VoucherContentController extends Controller
                     return $btn;
                    
                     })
-                    
+                    // <li>
+                    //                         <a href="javascript:void(0)" onclick="deleteRecord(' . $row->id . ')" class="dropdown-item">
+                    //                             <i class="bx bx-trash font-size-16 text-danger me-1"></i> Delete
+                    //                         </a>
+                    //                     </li>
                     
                     ->rawColumns(['action']) // Mark these columns as raw HTML
                     ->make(true);
@@ -96,7 +96,7 @@ public function store(Request $request)
        try {
         
         $data = $request->only([
-            'description','contact1','contact2','contact3','contact4','contact5','contact6'
+            'description','contact1','contact2','contact3','contact4','contact5','contact6','description_urdu'
         ]);
 
        $data['BranchID'] = Session::get('BranchID'); 

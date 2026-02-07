@@ -28,6 +28,10 @@ class ShirkaController extends Controller
                 return Datatables::of($data)
                     ->addIndexColumn()
                     // Status toggle column
+                     ->addColumn('logo', function ($row) {
+                        $logoUrl = asset($row->logo);
+                        return '<img src="' . $logoUrl . '" alt="Logo" style="max-width:100px; height:auto;">';
+                    })
                    
 
                     ->addColumn('action', function ($row) {
@@ -60,7 +64,7 @@ class ShirkaController extends Controller
                     })
                     
                     
-                    ->rawColumns(['action']) // Mark these columns as raw HTML
+                    ->rawColumns(['action','logo']) // Mark these columns as raw HTML
                     ->make(true);
             }
     
@@ -104,7 +108,12 @@ public function store(Request $request)
          
         // File uploads
         if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('shirka_logo', 'public');
+            // $data['logo'] = $request->file('logo')->store('shirka_logo', 'public');
+             $file = $request->file('logo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('shirka_logo'), $filename);
+        
+            $data['logo'] = 'shirka_logo/' . $filename;
         }
         
 

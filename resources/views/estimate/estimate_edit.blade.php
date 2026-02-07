@@ -597,8 +597,9 @@ function singlerowcalculation(idd)
 $('#subTotal').val((subTotal).toFixed(2));
 
 
-var vat = parseFloat(subTotal *.05).toFixed(2);
-
+//Tax
+            let VAT = @json(env('VAT_PERCENTAGE')); // e.g. 5
+            let vat = Number((subTotal * VAT / 100).toFixed(2));
 
 var Total = parseFloat(vat)+parseFloat(subTotal);
 

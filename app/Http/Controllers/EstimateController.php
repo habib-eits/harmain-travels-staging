@@ -39,19 +39,19 @@ class EstimateController extends Controller
             <ul class="dropdown-menu dropdown-menu-end">
                 <li>
                     <a href="' . URL('/EstimateViewPDF/' . $row->EstimateMasterID) . '"  class="dropdown-item">
-                        <i class="mdi mdi-file-pdf font-size-16 me-1" style="color:#FF5733;"></i> View Invoice
+                        <i class="mdi mdi-file-pdf font-size-16 me-1" style="color:#FF5733;"></i> View 
                     </a>
                 </li>
                 <li>
                     <a href="' . URL('/EstimateEdit/' . $row->EstimateMasterID) . '" class="dropdown-item">
-                        <i class="bx bx-pencil font-size-16 text-secondary me-1"></i> Edit Invoice
+                        <i class="bx bx-pencil font-size-16 text-secondary me-1"></i> Edit 
                     </a>
                 </li>
             
             
                 <li>
                     <a href="javascript:void(0);" onclick="delete_confirm2(\'EstimateDelete\', ' . $row->EstimateMasterID . ')" class="dropdown-item">
-                        <i class="bx bx-trash font-size-16 text-danger me-1"></i> Delete Invoice
+                        <i class="bx bx-trash font-size-16 text-danger me-1"></i> Delete 
                     </a>
                 </li>
             </ul>
@@ -88,6 +88,7 @@ class EstimateController extends Controller
           ->get();
 
          $tax = DB::table('tax')->where('Section','Estimate')->get();
+
  
         $challan_type = DB::table('challan_type')->get();
         $invoice_type = DB::table('invoice_type')->get();

@@ -11,6 +11,13 @@ class PartyAuthController extends Controller
 {
     public function login(Request $request)
     {
+        if(env('API_ENABLE') == 0)
+        {
+            throw ValidationException::withMessages([
+                'email' => ['Please Contact Admin to Enable Api'],
+            ]);
+        
+        }
        
       
         $request->validate([

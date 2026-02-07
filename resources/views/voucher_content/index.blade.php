@@ -264,8 +264,8 @@
                 $('#contact5').val(response.data.contact5);
                 $('#contact6').val(response.data.contact6);
                   
-                tinymce.get('description').setContent(response.data.description);
-                tinymce.get('description_urdu').setContent(response.data.description_urdu);
+                tinymce.get('description').setContent(response.data.description ?? '');
+                tinymce.get('description_urdu').setContent(response.data.description_urdu ?? '');
 
                 
 

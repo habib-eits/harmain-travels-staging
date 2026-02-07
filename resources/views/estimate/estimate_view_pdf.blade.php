@@ -266,25 +266,28 @@
      background-repeat: no-repeat;
     background-size: cover;
 
-     background-image: url({{URL('/assets/images/header.png')}});
-    
+
      
 }
 
 
         </style>
 </head>
-<body class="invoice"  style="margin-top: 200px;" >
+<body class="invoice"  >
 
 <div id="bg_logo"> </div>
      
         <table class="head container">
             <tr>
                 <td class="header">
-                    <img src="{{URL('/documents/'.$company[0]->Logo)}}" width="188" height="104" />                </td>
+                   <img src="{{ asset('documents/' . $company[0]->Logo) }}" alt="" width="{{ env('APP_LOGO_WIDTH') }}"
+                    height="{{ env('APP_LOGO_HEIGHT') }}">              
+                    </td>
                 <td class="shop-info">
                     <div class="shop-name">
-                        <div align="right"><div style="font-size: 16pt;line-height: 20pt;"><strong> {{$company[0]->Name}}<br>{{$company[0]->Name2}}</strong></div> 
+                        <div align="right"><div style="font-size: 16pt;line-height: 20pt;">
+                            <!--<strong> {{$company[0]->Name}}<br>{{$company[0]->Name2}}</strong>-->
+                        </div> 
       {{$company[0]->Address}}<br />
       Contact:{{$company[0]->Contact}}<br />
       TRN:{{$company[0]->TRN}}<br />
@@ -298,7 +301,7 @@
             </tr>
             <tr>
               <td colspan="2" class="header"><div align="center">
-                <h2><u>Quotation</u></h2>
+                <h2 style="margin-top:30px" ><u>Quotation</u></h2>
               </div></td>
             </tr>
 </table>
@@ -393,11 +396,13 @@
                               <th class="description">Subtotal</th>
                               <td class="price"><span class="totals-price"><span class="amount"> {{number_format($estimate[0]->SubTotal,2)}} {{env('APP_CURRENCY')}}</span></span></td>
                           </tr>
+                          @if(env('VAT_PERCENTAGE') > 0)
                           <tr class="order_total">
                               <td class="no-borders"></td>
                               <th class="description">5% VAT </th>
                               <td class="price"><span class="totals-price"><span class="amount">{{number_format($estimate[0]->Tax,2)}} {{env('APP_CURRENCY')}}</span></span></td>
                           </tr>
+                          @endif
                           <tr class="order_total">
                               <td class="no-borders"></td>
                               <th class="description">Total</th>

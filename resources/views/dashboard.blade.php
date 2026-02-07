@@ -818,22 +818,39 @@ $assets = DB::table('v_journal')
 @php
     $arrival = \App\Models\InvoiceMaster::where('FlightDateArrivalDeparture', date('Y-m-d'))->count();
     $depart = \App\Models\InvoiceMaster::where('FlightDateReturn', date('Y-m-d'))->count();
-    $makkah_check_in = \App\Models\InvoiceHotel::where('HotelCity', 'Makkah')->where('CheckInDate',date('Y-m-d'))->count();
-    $makkah_check_out = \App\Models\InvoiceHotel::where('HotelCity', 'Makkah')->where('CheckOutDate',date('Y-m-d'))->count();
+
+    $makkah_check_in = \App\Models\InvoiceHotel::where('HotelCity', 'Makkah')
+    ->where('CheckInDate',date('Y-m-d'))
+    ->selectRaw('SUM(CAST(HotelPax AS UNSIGNED)) as total')
+    ->value('total');
+
+    $makkah_check_out = \App\Models\InvoiceHotel::where('HotelCity', 'Makkah')
+    ->where('CheckOutDate',date('Y-m-d'))
+    ->selectRaw('SUM(CAST(HotelPax AS UNSIGNED)) as total')
+    ->value('total');
     
-    $madina_check_in = \App\Models\InvoiceHotel::where('HotelCity', 'Madina')->where('CheckInDate',date('Y-m-d'))->count();
-    $madina_check_out = \App\Models\InvoiceHotel::where('HotelCity', 'Madina')->where('CheckOutDate',date('Y-m-d'))->count();
+    $madina_check_in = \App\Models\InvoiceHotel::where('HotelCity', 'Madina')
+    ->where('CheckInDate',date('Y-m-d'))
+    ->selectRaw('SUM(CAST(HotelPax AS UNSIGNED)) as total')
+    ->value('total');
+
+    $madina_check_out = \App\Models\InvoiceHotel::where('HotelCity', 'Madina')
+    ->where('CheckOutDate',date('Y-m-d'))
+    ->selectRaw('SUM(CAST(HotelPax AS UNSIGNED)) as total')
+    ->value('total');
 
     $today = date('Y-m-d');
     $in_makkah = \App\Models\InvoiceHotel::where('HotelCity', 'Makkah')
     ->whereDate('CheckInDate', '<=', $today)   // already checked-in
     ->whereDate('CheckOutDate', '>=', $today)  // not yet checked-out
-    ->count();
+    ->selectRaw('SUM(CAST(HotelPax AS UNSIGNED)) as total')
+    ->value('total');
     
     $in_madina = \App\Models\InvoiceHotel::where('HotelCity', 'Madina')
     ->whereDate('CheckInDate', '<=', $today)   // already checked-in
     ->whereDate('CheckOutDate', '>=', $today)  // not yet checked-out
-    ->count();
+    ->selectRaw('SUM(CAST(HotelPax AS UNSIGNED)) as total')
+    ->value('total');
      
 
 
