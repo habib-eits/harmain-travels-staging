@@ -1,0 +1,114 @@
+ALTER TABLE `invoice_master` ADD `ReferenceNo` VARCHAR(255) NULL DEFAULT NULL AFTER `LeadID`;
+
+
+ALTER TABLE invoice_master
+ADD COLUMN RefNo VARCHAR(100),
+ADD COLUMN package_id INT,
+ADD COLUMN sub_agent VARCHAR(100),
+ADD COLUMN FlightPNR VARCHAR(100),
+
+ADD COLUMN FlightNoDeparture VARCHAR(50),
+ADD COLUMN SectorDeparture VARCHAR(50),
+ADD COLUMN FlightDateDeparture DATE,
+ADD COLUMN FlightTimeDeparture VARCHAR(10),
+ADD COLUMN FlightDateArrivalDeparture DATE,
+ADD COLUMN FlightTimeArrivalDeparture VARCHAR(10),
+
+ADD COLUMN FlightNoReturn VARCHAR(50),
+ADD COLUMN SectorReturn VARCHAR(50),
+ADD COLUMN FlightDateReturn DATE,
+ADD COLUMN FlightDepartureTimeReturn VARCHAR(10),
+ADD COLUMN FlightArrivalDateReturn DATE,
+ADD COLUMN FlightArrivalTimeReturn VARCHAR(10),
+
+ADD COLUMN SaleRate DECIMAL(10,2),
+ADD COLUMN SaleCurrecy VARCHAR(10),
+ADD COLUMN TicketCurrency VARCHAR(10),
+ADD COLUMN PurchaseRate DECIMAL(10,2),
+ADD COLUMN PurchaseCurrency VARCHAR(10),
+ADD COLUMN FlightNights INT;
+
+
+
+  Key ........................................ base64:Y2lZwVWZ1oewkpgY1R/Ucyyyf/iG6YRoU4pDn6bQEhA=
+  Cipher .......................................................................... AES-256-CBC  
+  Encrypted file ..................................... F:\xampp88\htdocs\travel_pro\.env.encrypted
+
+
+
+
+  O55sV73X1Qx3iQtV8VKGm/cuqmz0aoy6IPcnohCtACU=
+
+
+  for party wise sale add these db view
+
+
+  hotel
+  transport
+  pax
+
+ALTER TABLE `umrah_invoice_passengers` ADD `BranchID` INT(9) NULL AFTER `InvoiceMasterID`, ADD `UserID` INT(9) NULL AFTER `BranchID`;
+
+
+ALTER TABLE `umrah_invoice_hotel` ADD `BranchID` INT(9) NULL AFTER `InvoiceMasterID`, ADD `UserID` INT(9) NULL AFTER `BranchID`;
+
+
+ALTER TABLE `umrah_invoice_transport` ADD `BranchID` INT(9) NULL AFTER `InvoiceMasterID`, ADD `UserID` INT(9) NULL AFTER `BranchID`;
+
+
+  CREATE or replace VIEW `v_umrah_pax` AS select `umrah_invoice_passengers`.`umrah_invoice_master_id` AS `umrah_invoice_master_id`,`umrah_invoice_passengers`.`InvoiceMasterID` AS `InvoiceMasterID`,`umrah_invoice_passengers`.`BranchID` AS `BranchID`,`umrah_invoice_passengers`.`UserID` AS `UserID`,sum(`umrah_invoice_passengers`.`visa_sale`) AS `visa_sale`,sum(`umrah_invoice_passengers`.`visa_purchase`) AS `visa_purchase`,sum(`umrah_invoice_passengers`.`visa_sale` - `umrah_invoice_passengers`.`visa_purchase`) AS `visa_profit`,sum(`umrah_invoice_passengers`.`ticket_sale`) AS `ticket_sale`,sum(`umrah_invoice_passengers`.`ticket_purchase`) AS `ticket_purchase`,sum(`umrah_invoice_passengers`.`ticket_sale` - `umrah_invoice_passengers`.`ticket_purchase`) AS `ticket_profit` from `umrah_invoice_passengers` group by `umrah_invoice_passengers`.`umrah_invoice_master_id`,`umrah_invoice_passengers`.`InvoiceMasterID`,`umrah_invoice_passengers`.`BranchID`,`umrah_invoice_passengers`.`UserID`;
+
+ 
+
+  CREATE or replace VIEW `v_umrah_invoice_master` AS select `invoice_master`.`InvoiceMasterID` AS `InvoiceMasterID`,`invoice_master`.`BranchID` AS `BranchID`,`invoice_master`.`Date` AS `Date`,`invoice_master`.`PartyID` AS `PartyID`,`party`.`PartyType` AS `PartyType`,`party`.`PartyName` AS `PartyName`,`party`.`TRN` AS `TRN`,`party`.`Address` AS `Address`,`invoice_master`.`Voucher` AS `Voucher`,`v_umrah_pax`.`umrah_invoice_master_id` AS `umrah_invoice_master_id`,`v_umrah_pax`.`visa_sale` AS `visa_sale`,`v_umrah_pax`.`visa_purchase` AS `visa_purchase`,`v_umrah_pax`.`visa_profit` AS `visa_profit`,`v_umrah_pax`.`ticket_sale` AS `ticket_sale`,`v_umrah_pax`.`ticket_purchase` AS `ticket_purchase`,`v_umrah_pax`.`ticket_profit` AS `ticket_profit`,`v_umrah_hotel`.`HotelPayable` AS `HotelPayable`,`v_umrah_hotel`.`HotelReceivable` AS `HotelReceivable`,`v_umrah_hotel`.`hotel_profit` AS `hotel_profit`,`v_umrah_transport`.`transport_sale` AS `transport_sale`,`v_umrah_transport`.`transport_purchase` AS `transport_purchase`,`v_umrah_transport`.`transport_profit` AS `transport_profit` from ((((`invoice_master` join `party` on(`party`.`PartyID` = `invoice_master`.`PartyID`)) left join `v_umrah_pax` on(`invoice_master`.`InvoiceMasterID` = `v_umrah_pax`.`umrah_invoice_master_id`)) left join `v_umrah_hotel` on(`invoice_master`.`InvoiceMasterID` = `v_umrah_hotel`.`InvoiceMasterID`)) left join `v_umrah_transport` on(`invoice_master`.`InvoiceMasterID` = `v_umrah_transport`.`InvoiceMasterID`));
+
+
+  CREATE or replace VIEW `v_umrah_hotel` AS select `umrah_invoice_hotel`.`InvoiceMasterID` AS `InvoiceMasterID`,`umrah_invoice_hotel`.`BranchID` AS `BranchID`,`umrah_invoice_hotel`.`UserID` AS `UserID`,sum(`umrah_invoice_hotel`.`HotelPayable`) AS `HotelPayable`,sum(`umrah_invoice_hotel`.`HotelReceivable`) AS `HotelReceivable`,sum(`umrah_invoice_hotel`.`HotelReceivable` - `umrah_invoice_hotel`.`HotelPayable`) AS `hotel_profit` from `umrah_invoice_hotel` group by `umrah_invoice_hotel`.`InvoiceMasterID`,`umrah_invoice_hotel`.`BranchID`,`umrah_invoice_hotel`.`UserID`;
+
+
+  CREATE or replace VIEW `v_umrah_transport` AS select `umrah_invoice_transport`.`InvoiceMasterID` AS `InvoiceMasterID`,`umrah_invoice_transport`.`BranchID` AS `BranchID`,`umrah_invoice_transport`.`UserID` AS `UserID`,sum(`umrah_invoice_transport`.`TransportPayable`) AS `transport_sale`,sum(`umrah_invoice_transport`.`TransportReceivable`) AS `transport_purchase`,sum(`umrah_invoice_transport`.`TransportReceivable` - `umrah_invoice_transport`.`TransportPayable`) AS `transport_profit` from `umrah_invoice_transport` group by `umrah_invoice_transport`.`InvoiceMasterID`,`umrah_invoice_transport`.`BranchID`,`umrah_invoice_transport`.`UserID`;
+
+
+
+
+room view and meal plan
+
+ALTER TABLE `umrah_invoice_hotel` ADD `RoomView` VARCHAR(255) NULL AFTER `RoomType`, ADD `MealPlan` VARCHAR(255) NULL AFTER `RoomView`;
+
+CREATE TABLE `meal_plan` (
+  `id` int(14) NOT NULL,
+  `meal_plan` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `meal_plan` (`id`, `meal_plan`) VALUES
+(1, 'Room Only'),
+(2, 'Breakfast'),
+(3, 'Half Board'),
+(4, 'Full Board');
+
+CREATE TABLE `room_view` (
+  `id` int(14) NOT NULL,
+  `room_view` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `room_view` (`id`, `room_view`) VALUES
+(1, 'City View\n'),
+(2, 'Haram View'),
+(3, 'Partial Kaaba View'),
+(4, 'Premier Kaaba View');
+
+ALTER TABLE `meal_plan`
+  ADD PRIMARY KEY (`id`);
+ 
+ALTER TABLE `room_view`
+  ADD PRIMARY KEY (`id`);
+ 
+ALTER TABLE `meal_plan`
+  MODIFY `id` int(14) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+ALTER TABLE `room_view`
+  MODIFY `id` int(14) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+COMMIT;
+
+//group ticket added
+ALTER TABLE `journal` ADD `GroupTicketID` INT(12) NULL AFTER `InvoiceMasterID`;

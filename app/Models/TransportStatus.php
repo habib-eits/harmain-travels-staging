@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class TransportStatus extends Model
+{
+    use HasFactory;
+
+    protected $table = 'transport_status';
+
+    protected $fillable = [
+        
+        'transport_status',
+       
+    ];
+
+    
+}

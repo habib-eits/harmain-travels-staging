@@ -1,0 +1,16 @@
+{
+  "name": "jquery.modallink",
+  "version": "1.0.0",
+  "description": "modallink plugin for jquery",
+  "main": "jquery.modalLink-1.0.0.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "jquery",
+    "modal",
+    "popup"
+  ],
+  "author": "Markko Legonkov",
+  "license": "ISC"
+}
